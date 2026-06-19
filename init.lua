@@ -110,7 +110,7 @@ do
   vim.o.number = true
   -- You can also add relative line numbers, to help with jumping.
   --  Experiment for yourself to see if you like it!
-  -- vim.o.relativenumber = true
+  vim.o.relativenumber = true
 
   -- Enable mouse mode, can be useful for resizing splits for example!
   vim.o.mouse = 'a'
@@ -453,6 +453,11 @@ do
 
   -- ... and there is more!
   --  Check out: https://github.com/nvim-mini/mini.nvim
+
+  -- [[ Lazygit ]]
+  -- Floating lazygit window for git operations
+  vim.pack.add { gh 'kdheepak/lazygit.nvim' }
+  vim.keymap.set('n', '<leader>gg', '<cmd>LazyGit<CR>', { desc = 'Open Lazygit' })
 end
 
 -- ============================================================
