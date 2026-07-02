@@ -458,6 +458,12 @@ do
   -- Floating lazygit window for git operations
   vim.pack.add { gh 'kdheepak/lazygit.nvim' }
   vim.keymap.set('n', '<leader>gg', '<cmd>LazyGit<CR>', { desc = 'Open Lazygit' })
+
+  vim.pack.add { gh 'akinsho/toggleterm.nvim' }
+  require('toggleterm').setup {
+    open_mapping = [[<c-\>]],
+    direction = 'float',
+  }
 end
 
 -- ============================================================
@@ -717,6 +723,7 @@ do
   local servers = {
     -- clangd = {},
     gopls = {},
+    ruby_lsp = {},
     -- pyright = {},
     -- rust_analyzer = {},
     --
@@ -783,6 +790,7 @@ do
   local ensure_installed = vim.tbl_keys(servers or {})
   vim.list_extend(ensure_installed, {
     -- You can add other tools here that you want Mason to install
+    'ruff',
   })
 
   require('mason-tool-installer').setup { ensure_installed = ensure_installed }
@@ -806,7 +814,9 @@ do
       -- You can specify filetypes to autoformat on save here:
       local enabled_filetypes = {
         -- lua = true,
-        -- python = true,
+        python = true,
+        ruby = true,
+        go = true,
       }
       if enabled_filetypes[vim.bo[bufnr].filetype] then
         return { timeout_ms = 500 }
@@ -825,6 +835,7 @@ do
       --
       -- You can use 'stop_after_first' to run the first available formatter from the list
       -- javascript = { "prettierd", "prettier", stop_after_first = true },
+      python = { 'ruff_format' },
     },
   }
 
