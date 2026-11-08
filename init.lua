@@ -766,14 +766,13 @@ do
     gopls = {},
     ruby_lsp = {},
     -- pyright = {},
-    -- tsc = {},
+    tsc = {},
     --
     -- Some languages (like rust) have entire language plugins that can be useful:
     --    https://github.com/mrcjkb/rustaceanvim
     --
     -- But for many setups, the LSP (`rust_analyzer`) will work just fine
     -- rust_analyzer = {},
-    ts_ls = {},
 
     stylua = {}, -- Used to format Lua code
 
