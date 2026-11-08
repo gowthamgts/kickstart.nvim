@@ -351,6 +351,30 @@ do
     },
   }
 
+  -- Close the explorer when quitting the last real window, so a single `:q` exits
+  -- instead of leaving the explorer's list/input windows behind.
+  vim.api.nvim_create_autocmd('QuitPre', {
+    group = vim.api.nvim_create_augroup('snacks-explorer-quit', { clear = true }),
+    callback = function()
+      local cur = vim.api.nvim_get_current_win()
+      local snacks_wins = {}
+      for _, win in ipairs(vim.api.nvim_tabpage_list_wins(0)) do
+        local is_snacks = vim.bo[vim.api.nvim_win_get_buf(win)].filetype:match '^snacks_'
+        if win ~= cur and vim.api.nvim_win_get_config(win).relative == '' then
+          if not is_snacks then return end
+          table.insert(snacks_wins, win)
+        end
+      end
+      for _, picker in ipairs(Snacks.picker.get { source = 'explorer' }) do
+        picker:close()
+      end
+      -- picker:close() tears down its layout asynchronously; close the windows now
+      for _, win in ipairs(snacks_wins) do
+        pcall(vim.api.nvim_win_close, win, true)
+      end
+    end,
+  })
+
   vim.keymap.set('n', '<leader>e', function() Snacks.explorer() end, { desc = 'File [E]xplorer' })
   vim.keymap.set('n', '<leader>gg', function() Snacks.lazygit() end, { desc = 'Open Lazygit' })
   vim.keymap.set({ 'n', 't' }, [[<c-\>]], function() Snacks.terminal.toggle(nil, { win = { position = 'float' } }) end, { desc = 'Toggle terminal' })
