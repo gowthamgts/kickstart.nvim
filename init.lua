@@ -343,6 +343,12 @@ do
     lazygit = { enabled = true }, -- lazygit themed to the colorscheme, edits open in this nvim
     terminal = { enabled = true },
     explorer = { enabled = true }, -- sidebar file tree, also replaces netrw (`nvim .`, `:e dir/`)
+    picker = {
+      ui_select = false, -- keep telescope-ui-select for `vim.ui.select`
+      sources = {
+        explorer = { hidden = true }, -- show dotfiles by default (toggle with `H`)
+      },
+    },
   }
 
   vim.keymap.set('n', '<leader>e', function() Snacks.explorer() end, { desc = 'File [E]xplorer' })
