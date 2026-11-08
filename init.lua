@@ -342,8 +342,10 @@ do
     quickfile = { enabled = true }, -- render `nvim somefile` before plugins finish loading
     lazygit = { enabled = true }, -- lazygit themed to the colorscheme, edits open in this nvim
     terminal = { enabled = true },
+    explorer = { enabled = true }, -- sidebar file tree, also replaces netrw (`nvim .`, `:e dir/`)
   }
 
+  vim.keymap.set('n', '<leader>e', function() Snacks.explorer() end, { desc = 'File [E]xplorer' })
   vim.keymap.set('n', '<leader>gg', function() Snacks.lazygit() end, { desc = 'Open Lazygit' })
   vim.keymap.set({ 'n', 't' }, [[<c-\>]], function() Snacks.terminal.toggle(nil, { win = { position = 'float' } }) end, { desc = 'Toggle terminal' })
 
