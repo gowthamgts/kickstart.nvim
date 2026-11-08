@@ -757,6 +757,10 @@ do
     end,
   })
 
+  -- JSON/YAML schemas (package.json, tsconfig, github workflows, docker-compose, ...)
+  vim.pack.add { gh 'b0o/SchemaStore.nvim' }
+  local schemastore = require 'schemastore'
+
   -- Enable the following language servers
   --  Feel free to add/remove any LSPs that you want here. They will automatically be installed.
   --  See `:help lsp-config` for information about keys and how to configure
@@ -767,6 +771,23 @@ do
     ruby_lsp = {},
     -- pyright = {},
     tsc = {},
+    jsonls = {
+      settings = {
+        json = {
+          schemas = schemastore.json.schemas(),
+          validate = { enable = true },
+        },
+      },
+    },
+    yamlls = {
+      settings = {
+        yaml = {
+          -- use SchemaStore.nvim's schemas instead of yamlls' built-in store
+          schemaStore = { enable = false, url = '' },
+          schemas = schemastore.yaml.schemas(),
+        },
+      },
+    },
     --
     -- Some languages (like rust) have entire language plugins that can be useful:
     --    https://github.com/mrcjkb/rustaceanvim
@@ -983,6 +1004,7 @@ do
 
   -- Ensure basic parsers are installed
   local parsers = { 'bash', 'c', 'diff', 'html', 'lua', 'luadoc', 'markdown', 'markdown_inline', 'query', 'vim', 'vimdoc' }
+  vim.list_extend(parsers, { 'go', 'gomod', 'gosum', 'ruby', 'json', 'yaml', 'typescript', 'tsx', 'javascript' })
   require('nvim-treesitter').install(parsers)
 
   ---@param buf integer
