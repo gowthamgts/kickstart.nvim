@@ -330,9 +330,23 @@ local function gh(repo) return 'https://github.com/' .. repo end
 
 -- ============================================================
 -- SECTION 4: UI / CORE UX PLUGINS
--- guess-indent, gitsigns, which-key, colorscheme, todo-comments, mini modules
+-- snacks, guess-indent, gitsigns, which-key, colorscheme, todo-comments, mini modules
 -- ============================================================
 do
+  -- [[ snacks.nvim ]]
+  -- Set up first so `bigfile` and `quickfile` can act before other plugins load.
+  -- See `:help snacks` for every module.
+  vim.pack.add { gh 'folke/snacks.nvim' }
+  require('snacks').setup {
+    bigfile = { enabled = true }, -- disable heavy features (treesitter, lsp, ...) on huge files
+    quickfile = { enabled = true }, -- render `nvim somefile` before plugins finish loading
+    lazygit = { enabled = true }, -- lazygit themed to the colorscheme, edits open in this nvim
+    terminal = { enabled = true },
+  }
+
+  vim.keymap.set('n', '<leader>gg', function() Snacks.lazygit() end, { desc = 'Open Lazygit' })
+  vim.keymap.set({ 'n', 't' }, [[<c-\>]], function() Snacks.terminal.toggle(nil, { win = { position = 'float' } }) end, { desc = 'Toggle terminal' })
+
   -- [[ Installing and Configuring Plugins ]]
   --
   -- To install a plugin simply call `vim.pack.add` with its git url.
@@ -494,17 +508,6 @@ do
 
   -- ... and there is more!
   --  Check out: https://github.com/nvim-mini/mini.nvim
-
-  -- [[ Lazygit ]]
-  -- Floating lazygit window for git operations
-  vim.pack.add { gh 'kdheepak/lazygit.nvim' }
-  vim.keymap.set('n', '<leader>gg', '<cmd>LazyGit<CR>', { desc = 'Open Lazygit' })
-
-  vim.pack.add { gh 'akinsho/toggleterm.nvim' }
-  require('toggleterm').setup {
-    open_mapping = [[<c-\>]],
-    direction = 'float',
-  }
 end
 
 -- ============================================================
